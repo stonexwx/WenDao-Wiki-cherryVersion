@@ -79,11 +79,6 @@ function init() {
 //侧边目录生成
 const toc = ref<string>() //侧边目录
 
-interface Tree {
-  level: number
-  label: string
-  children?: Tree[]
-}
 let tocOld:String
 const jsInvoke = (headerList)=>{
   invoke('create_toc',{json:headerList})
