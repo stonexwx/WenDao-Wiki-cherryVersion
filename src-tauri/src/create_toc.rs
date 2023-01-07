@@ -1,3 +1,6 @@
+/*!
+ 生成大纲
+ */
 use serde::{Serialize,Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Poc {
