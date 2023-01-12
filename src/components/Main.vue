@@ -1,28 +1,28 @@
+<!--主页面-->
 <template>
   <div class="common-layout">
     <el-container>
+      <el-header><Menu/></el-header>
+      <el-container>
+        <el-aside width="250px">
+          <el-tabs :stretch="true"
+                   class="demo-tabs"
+                   tab-position="top">
+            <el-tab-pane label="云文件">云文件</el-tab-pane>
+            <el-tab-pane label="大纲">
+              <el-scrollbar :height="height-60+'px'">
+              <span v-html="toc"></span>
+              </el-scrollbar>
+            </el-tab-pane>
+          </el-tabs>
+        </el-aside>
 
-      <el-aside width="250px">
-
-        <el-tabs :stretch="true"
-                 class="demo-tabs"
-
-                 tab-position="top">
-          <el-tab-pane label="云文件">云文件</el-tab-pane>
-          <el-tab-pane label="大纲">
-            <el-scrollbar :height="height-60+'px'">
-            <span v-html="toc"></span>
-            </el-scrollbar>
-          </el-tab-pane>
-        </el-tabs>
-
-      </el-aside>
-
-      <el-main>
-        <el-card class="box-card" shadow="hover">
-          <div id="markdown-container" :style="{height : height+'px'}"></div>
-        </el-card>
-      </el-main>
+        <el-main>
+          <el-card class="box-card" shadow="hover">
+            <div id="markdown-container" :style="{height : height+'px'}"></div>
+          </el-card>
+        </el-main>
+      </el-container>
     </el-container>
   </div>
 </template>
@@ -31,40 +31,41 @@
 import Cherry from "cherry-markdown";
 import {onMounted, ref} from "vue";
 import {appWindow} from '@tauri-apps/api/window';
-import type Node from 'element-plus/es/components/tree/src/model/node'
 import {invoke} from "@tauri-apps/api";
-import {s} from "@tauri-apps/api/shell-cbf4da8b";
+import {listen} from '@tauri-apps/api/event'
+import 'cherry-markdown/dist/cherry-markdown.min.css'
 //窗口自适应
 const height = ref(0)
 const size = appWindow.innerSize();
 const factor = appWindow.scaleFactor();
 const cre = ref()
-function getSize() {
+const getSize=()=> {
   size.then(async Res => {
-    height.value = Res.toLogical(await factor).height -4
+    height.value = Res.toLogical(await factor).height -27
   })
   appWindow.onResized(() => {
     const size = appWindow.innerSize();
     size.then(async Res => {
-      height.value = Res.toLogical(await factor).height -4
+      height.value = Res.toLogical(await factor).height - 27
     })
   });
 }
 
-//初始化窗口
 
+//初始化窗口
 function init() {
   getSize()
-
+  //cherry 监听
   const callbacks = {
-    //用户输入监听
+    //用户输入字符监听
     afterChange: (text, html) => {
-      createToc(cherry)
+      // createToc(cherry)
     },
   }
+  //rust事件监听
   let cherry = new Cherry({
     id: 'markdown-container',
-    value: '# welcome to cherry editor!',
+    value: 'valueInFo',
     previewer: {
       enablePreviewerBubble: true,
     },
@@ -72,20 +73,23 @@ function init() {
       afterChange: callbacks.afterChange,
     },
   })
-  cre.value=cherry
+  cre.value = cherry
   createToc(cherry)
 }
 
 //侧边目录生成
 const toc = ref<string>() //侧边目录
-
 let tocOld:String
+
+//通过rust生成目录结构
 const jsInvoke = (headerList)=>{
   invoke('create_toc',{json:headerList})
       .then(res =>{
         typeof res === "string" ? toc.value = res : ""
       })
 }
+
+//创建目录
 const createToc = (cherry:Cherry)=> {
   let headerList = JSON.stringify(getToc(cherry))
   if(tocOld===undefined||tocOld===null){
@@ -97,6 +101,8 @@ const createToc = (cherry:Cherry)=> {
   }
 
 }
+
+//获取文本目录结构
 const getToc = (cherry:Cherry)=>{
   let html  = cherry.getHtml()
   const headerList = [];
@@ -132,5 +138,9 @@ onMounted(() => {
 :deep(.el-tabs) {
   --el-tabs-header-height: 48px;
 }
-
+:deep(.el-header){
+  --el-header-padding:0;
+  padding: var(--el-header-padding);
+  height: auto;
+}
 </style>

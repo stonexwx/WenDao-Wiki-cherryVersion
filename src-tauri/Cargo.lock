@@ -233,11 +233,13 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 name = "cherry_mc"
 version = "0.0.0"
 dependencies = [
+ "lazy_static",
  "rfd",
  "serde",
  "serde_json",
  "tauri",
  "tauri-build",
+ "uuid 1.2.2",
 ]
 
 [[package]]
