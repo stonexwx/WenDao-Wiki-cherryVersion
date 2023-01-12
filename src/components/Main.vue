@@ -2,7 +2,10 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-header><Menu/></el-header>
+      <el-header>
+        <Menu :cherry="cre"/>
+      </el-header>
+
       <el-container>
         <el-aside width="250px">
           <el-tabs :stretch="true"
@@ -34,6 +37,7 @@ import {appWindow} from '@tauri-apps/api/window';
 import {invoke} from "@tauri-apps/api";
 import {listen} from '@tauri-apps/api/event'
 import 'cherry-markdown/dist/cherry-markdown.min.css'
+
 //窗口自适应
 const height = ref(0)
 const size = appWindow.innerSize();
@@ -59,7 +63,7 @@ function init() {
   const callbacks = {
     //用户输入字符监听
     afterChange: (text, html) => {
-      // createToc(cherry)
+      createToc(cherry)
     },
   }
   //rust事件监听

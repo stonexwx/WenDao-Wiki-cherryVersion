@@ -9,7 +9,7 @@
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item>
+          <el-dropdown-item @click="open">
             打开
           </el-dropdown-item>
           <el-dropdown-item>Action 2</el-dropdown-item>
@@ -25,9 +25,21 @@
 import { appWindow } from '@tauri-apps/api/window'
 import { ref } from 'vue'
 import Cherry from "cherry-markdown";
+import { invoke } from '@tauri-apps/api/tauri'
+
 const props = defineProps({
   cherry: Cherry
 })
+
+const open= async ()=> {
+
+  if(props.cherry.getValue() === ""){
+    let obj = await invoke("open")
+    props.cherry.setMarkdown(obj.text)
+  }
+
+
+}
 </script>
 
 <style scoped>
