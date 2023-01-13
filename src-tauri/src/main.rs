@@ -4,6 +4,9 @@
 )]
 
 use std::collections::HashMap;
+use std::thread::sleep;
+use std::time;
+use tauri::{Manager, Window};
 use crate::create_toc::Poc;
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
@@ -19,6 +22,7 @@ fn create_toc(json:&str) -> String{
 fn open()->HashMap<String,String>{
     menu::open_menu()
 }
+
 
 fn main() {
     tauri::Builder::default()

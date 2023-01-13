@@ -32,10 +32,10 @@
 
 <script setup>
 import Cherry from "cherry-markdown";
-import {onMounted, ref} from "vue";
+import {onBeforeMount, onMounted, ref} from "vue";
 import {appWindow} from '@tauri-apps/api/window';
 import {invoke} from "@tauri-apps/api";
-import {listen} from '@tauri-apps/api/event'
+import {listen, once} from '@tauri-apps/api/event'
 import 'cherry-markdown/dist/cherry-markdown.min.css'
 
 //窗口自适应
@@ -66,10 +66,15 @@ function init() {
       createToc(cherry)
     },
   }
+  let text=""
+  if(localStorage.getItem("text")!==""){
+    text = localStorage.getItem("text")
+    localStorage.removeItem("text")
+  }
   //rust事件监听
   let cherry = new Cherry({
     id: 'markdown-container',
-    value: 'valueInFo',
+    value: text,
     previewer: {
       enablePreviewerBubble: true,
     },
@@ -147,4 +152,5 @@ onMounted(() => {
   padding: var(--el-header-padding);
   height: auto;
 }
+
 </style>
