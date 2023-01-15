@@ -67,7 +67,7 @@ function init() {
     },
   }
   let text=""
-  if(localStorage.getItem("text")!==""){
+  if(localStorage.getItem("text")!==null &&localStorage.getItem("text")!==""){
     text = localStorage.getItem("text")
     localStorage.removeItem("text")
   }
@@ -82,6 +82,11 @@ function init() {
       afterChange: callbacks.afterChange,
     },
   })
+  if(text!==""){
+    sessionStorage.setItem("save","true")
+  }else {
+    sessionStorage.setItem("save","false")
+  }
   cre.value = cherry
   createToc(cherry)
 }

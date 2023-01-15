@@ -13,7 +13,7 @@
 # 技术
 使用Vue3 + Element UI Plus + 腾讯Cherry Markdown + Tauri +Rust 完成桌面端开发
 
-Java完成云端开发
+Java完成云端开发，或者使用Rust，看我学习进度吧
 
 ### 题外话
 

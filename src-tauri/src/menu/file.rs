@@ -44,6 +44,9 @@ pub fn open_file() -> Result<HashMap<String,String>,Box<dyn Error>> {
     let mut map: HashMap<String,String> = HashMap::with_capacity(2);
     map.insert("text".to_string(),s);
     map.insert("name".to_string(),get_file_name(&path));
+    if let Some(res) = path.to_str(){
+        map.insert("path".to_string(),res.to_string());
+    }
     Ok(map)
 }
 //保存指定文件
