@@ -41,10 +41,13 @@ const props = defineProps({
 const open= async ()=> {
   await invoke("open").then(async res => {
     if (props.cherry.getValue() === "") {
-      props.cherry.setMarkdown(res.text)
+
+      // props.cherry.setMarkdown(res.text)
+      console.log(props.cherry.cherryDom)
       sessionStorage.setItem("save","true")
       setStorage(appWindow.label,res.path)
       await appWindow.setTitle(res.name)
+
     } else {
       let uuid = getUUID()
       const webview = new WebviewWindow(uuid, {

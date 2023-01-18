@@ -58,6 +58,7 @@
         "depends": []
       },
       "externalBin": [],
+      "publisher": "xwx",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -74,7 +75,9 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
+      "resources": [
+        "./db/*"
+      ],
       "shortDescription": "",
       "targets": "all",
       "windows": {

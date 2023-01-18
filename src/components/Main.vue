@@ -39,6 +39,7 @@ import {listen, once} from '@tauri-apps/api/event'
 import 'cherry-markdown/dist/cherry-markdown.min.css'
 
 //窗口自适应
+
 const height = ref(0)
 const size = appWindow.innerSize();
 const factor = appWindow.scaleFactor();
@@ -71,7 +72,7 @@ function init() {
     text = localStorage.getItem("text")
     localStorage.removeItem("text")
   }
-  //rust事件监听
+
   let cherry = new Cherry({
     id: 'markdown-container',
     value: text,
