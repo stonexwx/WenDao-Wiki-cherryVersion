@@ -11,7 +11,7 @@
 + 文件版本管理
 等...我还没想出来
 # 技术
-使用Vue3 + Element UI Plus + 腾讯Cherry Markdown + Tauri +Rust 完成桌面端开发
+使用Vue3 + Element UI Plus + 腾讯Cherry Markdown + Tauri +Rust+*SQLite* 完成桌面端开发
 
 Java完成云端开发，或者使用Rust，看我学习进度吧
 
