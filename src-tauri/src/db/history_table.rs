@@ -6,15 +6,13 @@ use chrono::prelude::*;
 use rusqlite::Connection;
 
 struct History {
-    file_name:String,
     path:String,
     date: DateTime<Local>
 }
 
 impl History{
-    pub fn new(file_name:String, path:String) -> History{
+    pub fn new(path:String) -> History{
         History{
-            file_name,
             path,
             date:Local::now()
         }
