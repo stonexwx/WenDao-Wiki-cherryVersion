@@ -27,6 +27,7 @@
         </el-main>
       </el-container>
     </el-container>
+    <Dialog @closeDialog="closeDialog" :flag="flag" message="文件还未保存确认关闭吗？" tip="警告"/>
   </div>
 </template>
 
@@ -37,9 +38,12 @@ import {appWindow} from '@tauri-apps/api/window';
 import {invoke} from "@tauri-apps/api";
 import {listen, once} from '@tauri-apps/api/event'
 import 'cherry-markdown/dist/cherry-markdown.min.css'
+import Dialog from "./Dialog/Dialog.vue";
+
+//弹出框
+let flag  = ref(false)
 
 //窗口自适应
-
 const height = ref(0)
 const size = appWindow.innerSize();
 const factor = appWindow.scaleFactor();
@@ -64,6 +68,7 @@ function init() {
   const callbacks = {
     //用户输入字符监听
     afterChange: (text, html) => {
+      sessionStorage.setItem("save","ture")
       createToc(cherry)
     },
   }
@@ -130,8 +135,19 @@ const getToc = (cherry)=>{
   });
   return headerList;
 }
-
+const closeDialog = () => {
+  flag.value=false
+}
 onMounted(() => {
+  //监测窗口关闭
+  appWindow.listen('tauri://close-requested',async ()=>{
+    if(sessionStorage.getItem("save")==="true"){
+      flag.value = true
+    }else {
+        await appWindow.close()
+    }
+
+  })
   init()
 })
 

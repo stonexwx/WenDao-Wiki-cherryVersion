@@ -38,12 +38,15 @@ const props = defineProps({
   cherry: Cherry
 })
 
+/**
+ * 打开文件
+ * @returns {Promise<void>}
+ */
 const open= async ()=> {
   await invoke("open").then(async res => {
     if (props.cherry.getValue() === "") {
 
       // props.cherry.setMarkdown(res.text)
-      console.log(props.cherry.cherryDom)
       sessionStorage.setItem("save","true")
       setStorage(appWindow.label,res.path)
       await appWindow.setTitle(res.name)
@@ -66,6 +69,10 @@ const open= async ()=> {
   })
 }
 
+/**
+ * 创建新的窗口
+ * @returns {Promise<void>}
+ */
 const newWindow = async ()=>{
   let uuid = getUUID()
   const webview = new WebviewWindow(uuid, {
@@ -78,6 +85,10 @@ const newWindow = async ()=>{
   })
 }
 
+/**
+ * 文件保存
+ * @returns {Promise<void>}
+ */
 const save = async ()=>{
   if(sessionStorage.getItem("save")==="true"){
 
