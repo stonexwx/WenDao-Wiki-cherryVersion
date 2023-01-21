@@ -7,6 +7,8 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Aside: typeof import('./src/components/Aside/Aside.vue')['default']
+    CherryEditor: typeof import('./src/components/CherryEditor/CherryEditor.vue')['default']
     Dialog: typeof import('./src/components/Dialog/Dialog.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElButton: typeof import('element-plus/es')['ElButton']

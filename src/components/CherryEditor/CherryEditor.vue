@@ -1,10 +1,12 @@
 <template>
-  <div id="markdown-container" :style="{height : height+'px'}"></div>
+  <el-card class="box-card" shadow="hover">
+    <div id="markdown-container" :style="{height : height+'px'}"></div>
+  </el-card>
 </template>
 
 <script setup>
 //窗口自适应
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {appWindow} from "@tauri-apps/api/window";
 import Cherry from "cherry-markdown";
 import {invoke} from "@tauri-apps/api";
@@ -99,8 +101,14 @@ const getToc = (cherry)=>{
   });
   return headerList;
 }
+
+onMounted(()=>{
+  init()
+})
 </script>
 
 <style scoped>
-
+:deep(#markdown-container) {
+  height: v-bind(height) px;
+}
 </style>

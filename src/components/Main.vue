@@ -3,27 +3,16 @@
   <div class="common-layout">
     <el-container>
       <el-header>
-        <Menu :cherry="cre"/>
+        <Menu/>
       </el-header>
 
       <el-container>
         <el-aside width="250px">
-          <el-tabs :stretch="true"
-                   class="demo-tabs"
-                   tab-position="top">
-            <el-tab-pane label="云文件">云文件</el-tab-pane>
-            <el-tab-pane label="大纲">
-              <el-scrollbar :height="height-60+'px'">
-              <span v-html="toc"></span>
-              </el-scrollbar>
-            </el-tab-pane>
-          </el-tabs>
+          <Aside/>
         </el-aside>
 
         <el-main>
-          <el-card class="box-card" shadow="hover">
             <CherryEditor/>
-          </el-card>
         </el-main>
       </el-container>
     </el-container>
@@ -37,6 +26,7 @@ import {appWindow} from '@tauri-apps/api/window';
 import 'cherry-markdown/dist/cherry-markdown.min.css'
 import Dialog from "./Dialog/Dialog.vue";
 import CherryEditor from "./CherryEditor/CherryEditor.vue";
+import Aside from "./Aside/Aside.vue";
 
 //弹出框
 let flag  = ref(false)
@@ -66,13 +56,10 @@ onMounted(() => {
   padding: 0;
 }
 
-:deep(#markdown-container) {
-  height: v-bind(height) px;
-}
-
 :deep(.el-tabs) {
   --el-tabs-header-height: 48px;
 }
+
 :deep(.el-header){
   --el-header-padding:0;
   padding: var(--el-header-padding);
