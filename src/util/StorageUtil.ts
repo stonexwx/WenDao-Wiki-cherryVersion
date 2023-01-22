@@ -1,3 +1,5 @@
+import {appWindow} from "@tauri-apps/api/window";
+
 interface StorageInterface {
     //设置localStorage
     set: (key: string, value: any) => void;
@@ -7,6 +9,8 @@ interface StorageInterface {
     has: (key: string, isJson?: boolean) => boolean;
     //移除
     remove: (key: string) => void;
+    //移除json对象里面的值
+    removeJsonKey: (key: string,JsonKey: string) => void;
 }
 
 interface SessionStorageInterface extends StorageInterface {
@@ -52,6 +56,11 @@ const extend = (s: Storage): StorageInterface => {
         remove: (key) => {
             s.removeItem(key);
         },
+        removeJsonKey(key,JsonKey){
+            let map:any = this.get(key,true)
+            delete map[JsonKey];
+            this.set(key,map)
+        }
     };
 };
 
