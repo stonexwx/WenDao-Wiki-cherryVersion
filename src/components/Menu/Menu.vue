@@ -33,10 +33,7 @@ import { invoke } from '@tauri-apps/api/tauri'
 import { WebviewWindow } from '@tauri-apps/api/window'
 import {getUUID} from "../../util/uuidUtil";
 import storageUtil from "../../util/StorageUtil";
-
-const props = defineProps({
-  cherry: Cherry
-})
+import CherryObjUtil from "../../util/CherryObjUtil";
 
 /**
  * 打开文件
@@ -44,12 +41,9 @@ const props = defineProps({
  */
 const open= async ()=> {
   await invoke("open").then(async res => {
-    if (props.cherry.getValue() === "") {
-      let text = "# cherry-markdown-tauri\n" +
-          "# 介绍\n" +
-          "本项目基于腾讯Cherry Markdown项目，使用Tauri完成桌面端开发，使其能够在windows、mac os、linux系统上独立运行。\n" +
-          "# 特性\n"
-      props.cherry.setMarkdown(text)
+
+    if (CherryObjUtil.interface().getValue() === "") {
+      CherryObjUtil.interface().setMarkdown(res.text)
       sessionStorage.setItem("save","true")
       setStorage(appWindow.label,res.path)
       await appWindow.setTitle(res.name)

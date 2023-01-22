@@ -17,10 +17,14 @@ mod create_toc;
 mod menu;
 mod db;
 
+#[derive(Clone, serde::Serialize)]
+struct Payload {
+    message: String,
+}
 //目录生成command
 #[tauri::command]
-fn create_toc(json:&str) -> String{
-    Poc::create(json)
+fn create_toc(json:&str,label:&str,window:Window)->Result<(),String>{
+    window.emit_to(label, "toc", Payload { message: Poc::create(json) }).map_err(|err| err.to_string())
 }
 
 #[tauri::command]

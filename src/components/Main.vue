@@ -14,6 +14,7 @@
         <el-main>
             <CherryEditor/>
         </el-main>
+
       </el-container>
     </el-container>
     <Dialog @closeDialog="closeDialog" :flag="flag" message="文件还未保存确认关闭吗？" tip="警告"/>
@@ -21,7 +22,7 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from "vue";
+import {nextTick, onMounted, ref} from "vue";
 import {appWindow} from '@tauri-apps/api/window';
 import 'cherry-markdown/dist/cherry-markdown.min.css'
 import Dialog from "./Dialog/Dialog.vue";
@@ -43,6 +44,7 @@ onMounted(() => {
         await appWindow.close()
     }
   })
+
 })
 
 </script>
@@ -56,14 +58,13 @@ onMounted(() => {
   padding: 0;
 }
 
-:deep(.el-tabs) {
-  --el-tabs-header-height: 48px;
-}
-
 :deep(.el-header){
   --el-header-padding:0;
   padding: var(--el-header-padding);
   height: auto;
 }
 
+:deep(.el-tabs) {
+  --el-tabs-header-height: 48px;
+}
 </style>
