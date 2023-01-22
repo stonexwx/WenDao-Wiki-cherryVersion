@@ -28,6 +28,7 @@ import 'cherry-markdown/dist/cherry-markdown.min.css'
 import Dialog from "./Dialog/Dialog.vue";
 import CherryEditor from "./CherryEditor/CherryEditor.vue";
 import Aside from "./Aside/Aside.vue";
+import StorageUtil from "../util/StorageUtil";
 
 //弹出框
 let flag  = ref(false)
@@ -41,7 +42,8 @@ onMounted(() => {
     if(sessionStorage.getItem("save")==="true"){
       flag.value = true
     }else {
-        await appWindow.close()
+      StorageUtil.removeJsonKey("windowMap",appWindow.label)
+      await appWindow.close()
     }
   })
 

@@ -1,4 +1,3 @@
-import {Cherry} from "cherry-markdown/types/cherry";
 import CherryObj from "cherry-markdown";
 import {CreateTocUtil} from "./CreateTocUtil";
 
