@@ -21,7 +21,6 @@ export default class CherryObjUtil{
 
     private static afterChange(text:string,html:string) {
         CreateTocUtil()
-
     }
 
 
