@@ -1,9 +1,9 @@
 [package]
 name = "cherry-markdown-tauri"
-version = "0.0.0"
+version = "0.0.1"
 description = "A Tauri App"
-authors = ["you"]
-license = ""
+authors = ["xwx"]
+license = "Apache-2.0 license"
 repository = ""
 edition = "2021"
 rust-version = "1.57"
@@ -22,6 +22,7 @@ uuid = "1.2.2"
 lazy_static = "*"
 rusqlite = { version = "0.28.0", features = ["bundled"] }
 chrono = "*"
+imara-diff = "*"
 [features]
 # by default Tauri runs in production mode
 # when `tauri dev` runs it is executed with `cargo run --no-default-features` if `devPath` is an URL
