@@ -41,7 +41,7 @@ fn get_file_content(path:&PathBuf)->Result<HashMap<String,String>,Box<dyn Error>
     let mut file = File::open(path)?;
     let mut s = String::new();
     file.read_to_string(&mut s)?;
-    let mut map: HashMap<String,String> = HashMap::with_capacity(2);
+    let mut map: HashMap<String,String> = HashMap::with_capacity(3);
     map.insert("text".to_string(),s);
     map.insert("name".to_string(),get_file_name(path));
     if let Some(res) = path.to_str(){
@@ -50,7 +50,7 @@ fn get_file_content(path:&PathBuf)->Result<HashMap<String,String>,Box<dyn Error>
     Ok(map)
 }
 //获取文件名
-fn get_file_name(path: &PathBuf) -> String{
+pub(crate) fn get_file_name(path: &PathBuf) -> String{
     let mut s = String::new();
     if let Some(name) = path.file_name(){
         if let Some(res) = name.to_str(){

@@ -13,14 +13,23 @@ mod file;
 1的情况需要先选文件，然后由前端将目标文件路径返回给Rust读取文件内容
 2直接打开文件获取内容即可
 **/
+
+//打开按钮情况2
 pub fn open_menu() -> Result<HashMap<String,String>,Box<dyn Error>>{
     file::open_file()
 }
 
-pub fn choose_file() -> PathBuf{
-    file::get_open_file_path()
+//打开按钮情况1
+pub fn choose_file() -> Result<HashMap<String,String>,Box<dyn Error>>{
+    let path = file::get_open_file_path();
+    let name  = file::get_file_name(&path);
+    let mut map:HashMap<String,String> = HashMap::with_capacity(2);
+    map.insert("name".to_string(),name);
+    if let Some(res) = path.to_str(){
+        map.insert("path".to_string(),res.to_string());
+    }
+    Ok(map)
 }
-
 pub fn get_file_content(path: &str) -> Result<HashMap<String,String>,Box<dyn Error>>{
     file::open_file_for_path(path)
 }

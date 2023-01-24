@@ -11,7 +11,7 @@
         <el-divider></el-divider>
         <el-menu-item index="1-2" @click="newWindow">新建</el-menu-item>
         <el-divider></el-divider>
-        <el-menu-item index="1-3" >保存</el-menu-item>
+        <el-menu-item index="1-3">保存</el-menu-item>
         <el-menu-item index="1-3">另存为</el-menu-item>
         <el-divider></el-divider>
         <el-sub-menu index="1-4">
@@ -27,50 +27,51 @@
 </template>
 
 <script setup>
-import { appWindow } from '@tauri-apps/api/window'
+import {appWindow, WebviewWindow} from '@tauri-apps/api/window'
 import Cherry from "cherry-markdown";
-import { invoke } from '@tauri-apps/api/tauri'
-import { WebviewWindow } from '@tauri-apps/api/window'
 import {getUUID} from "../../util/uuidUtil";
 import storageUtil from "../../util/StorageUtil";
+import StorageUtil from "../../util/StorageUtil";
 import CherryObjUtil from "../../util/CherryObjUtil";
+import {invoke} from "@tauri-apps/api";
 
 /**
  * 打开文件
  * @returns {Promise<void>}
  */
-const open= async ()=> {
-  await invoke("open").then(async res => {
+const open = async () => {
 
-    if (CherryObjUtil.interface().getValue() === "") {
+  if (CherryObjUtil.interface().getValue() === "") {
+    await invoke("open").then(async res => {
       CherryObjUtil.interface().setMarkdown(res.text)
-      sessionStorage.setItem("save","true")
-      setStorage(appWindow.label,res.path)
+      sessionStorage.setItem("save", "true")
+      setStorage(appWindow.label, res.path)
       await appWindow.setTitle(res.name)
-
-    } else {
+    })
+  } else {
+    await invoke("choose_file").then(async res => {
+      StorageUtil.set("filePath", res.path)
       let uuid = getUUID()
       const webview = new WebviewWindow(uuid, {
         url: '/Home',
         title: res.name
       })
       await webview.once('tauri://created', async function () {
-        localStorage.setItem("text", res.text)
-        setStorage(uuid,res.path)
+        setStorage(uuid, res.path)
       })
       await webview.once('tauri://error', function (e) {
         // an error occurred during webview window creation
-        ElMessage.error("创建失败："+e)
+        ElMessage.error("创建失败：" + e)
       })
-    }
-  })
+    })
+  }
 }
 
 /**
  * 创建新的窗口
  * @returns {Promise<void>}
  */
-const newWindow = async ()=>{
+const newWindow = async () => {
   let uuid = getUUID()
   const webview = new WebviewWindow(uuid, {
     url: '/Home',
@@ -78,7 +79,7 @@ const newWindow = async ()=>{
   })
   await webview.once('tauri://error', function (e) {
     // an error occurred during webview window creation
-    ElMessage.error("创建失败："+e)
+    ElMessage.error("创建失败：" + e)
   })
 }
 
@@ -86,19 +87,19 @@ const newWindow = async ()=>{
  * 文件保存
  * @returns {Promise<void>}
  */
-const save = async ()=>{
-  if(sessionStorage.getItem("save")==="true"){
+const save = async () => {
+  if (sessionStorage.getItem("save") === "true") {
 
   }
 }
 
-const setStorage =  (label,path)=>{
-  let map = storageUtil.get("windowMap",true)
-  if (map === null){
+const setStorage = (label, path) => {
+  let map = storageUtil.get("windowMap", true)
+  if (map === null) {
     map = {}
   }
   map[label] = path
-  storageUtil.set("windowMap",map)
+  storageUtil.set("windowMap", map)
 }
 </script>
 
@@ -109,9 +110,10 @@ const setStorage =  (label,path)=>{
   display: flex;
   align-items: center;
 }
-.el-divider--horizontal{
+
+.el-divider--horizontal {
   width: 240px;
-  margin:1px;
+  margin: 1px;
 }
 
 </style>

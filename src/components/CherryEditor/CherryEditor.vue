@@ -10,6 +10,7 @@ import {appWindow} from "@tauri-apps/api/window";
 import Cherry from "cherry-markdown";
 import {invoke} from "@tauri-apps/api";
 import CherryObjUtil from "../../util/CherryObjUtil";
+import StorageUtil from "../../util/StorageUtil";
 
 //窗口自适应
 const height = ref(0)
@@ -36,16 +37,24 @@ const getSize=()=> {
   })
 }
 
-onMounted(()=>{
+onMounted(async () => {
 
   getSize()
 
   //打开文件后从缓存中读取前一个窗口从Rust事件获取到的文本信息，这个有改进空间就看Tauri后期有没有优化
-  if(localStorage.getItem("text")!==null &&localStorage.getItem("text")!==""){
-    CherryObjUtil.interface().setMarkdown(localStorage.getItem("text"))
-    localStorage.removeItem("text")
+  if (StorageUtil.has("filePath",false)) {
+    let path = StorageUtil.get("filePath",false)
+    console.log(path)
+    await invoke("open_file_for_path", {path: path})
+        .then(res => {
+          console.log(res)
+          CherryObjUtil.interface().setMarkdown(res.text)
+          StorageUtil.remove("filePath")
+        })
+  } else {
+    CherryObjUtil.interface()
   }
-  CherryObjUtil.interface()
+
 
 })
 </script>
