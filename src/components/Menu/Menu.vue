@@ -44,7 +44,6 @@ const open = async () => {
   if (CherryObjUtil.interface().getValue() === "") {
     await invoke("open").then(async res => {
       CherryObjUtil.interface().setMarkdown(res.text)
-      sessionStorage.setItem("save", "true")
       setStorage(appWindow.label, res.path)
       await appWindow.setTitle(res.name)
     })

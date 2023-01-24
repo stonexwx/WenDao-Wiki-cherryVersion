@@ -23,7 +23,7 @@ pub(crate) fn get_open_file_path() -> PathBuf{
     path_buf
 }
 //用于保存文件时拉起系统文件管理
-fn get_save_file_path() -> PathBuf{
+pub(crate) fn get_save_file_path() -> PathBuf{
     let path_buf_o = FileDialog::new()
         .add_filter("markdown", &["md"])
         .add_filter("html",&["html"])
