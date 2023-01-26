@@ -1,5 +1,6 @@
 import CherryObj from "cherry-markdown";
 import {CreateTocUtil} from "./CreateTocUtil";
+import storageUtil from "./StorageUtil";
 
 export default class CherryObjUtil{
     private static _cherry:CherryObj
@@ -21,6 +22,9 @@ export default class CherryObjUtil{
 
     private static afterChange(text:string,html:string) {
         CreateTocUtil()
+        if(storageUtil.session.get("save",false)==="false"){
+            storageUtil.session.set("save","true")
+        }
     }
 
 

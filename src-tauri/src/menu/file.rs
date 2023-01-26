@@ -4,7 +4,7 @@
  */
 use std::collections::HashMap;
 use std::error::Error;
-use std::fs::{File};
+use std::fs::{File, OpenOptions};
 use std::io::{Read, Write};
 use std::path;
 use std::path::{PathBuf};
@@ -79,9 +79,10 @@ pub fn save_file(text: String) ->Result<String,Box<dyn Error>>{
     file.write_all(text.as_ref())?;
     Ok(String::from("保存成功！！"))
 }
+
 //保存修改后的文件
 pub fn update_file(path:String, text:String) ->Result<String,Box<dyn Error>>{
-    let mut file = File::open(path)?;
+    let mut file = OpenOptions::new().read(true).write(true).open(path)?;
     file.write_all(text.as_ref())?;
     Ok(String::from("保存成功！！"))
 }

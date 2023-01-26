@@ -6,7 +6,8 @@ use lazy_static::lazy_static;
 use rusqlite::{Connection, params, Result};
 use std::sync::Mutex;
 
-mod history_table;
+mod open_history_table;
+mod file_history_table;
 
 //检测表是否存在
 fn check_table_existed(table_name : &str, con : &Connection) -> bool {
@@ -23,7 +24,7 @@ fn check_table_existed(table_name : &str, con : &Connection) -> bool {
 
 pub fn init(connect: &Connection){
     if !check_table_existed("history",connect){
-        if let Err(e) = history_table::create_history_table(connect){
+        if let Err(e) = open_history_table::create_history_table(connect){
             println!("{:?}",e);
         }
     }

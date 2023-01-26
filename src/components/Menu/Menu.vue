@@ -11,8 +11,8 @@
         <el-divider></el-divider>
         <el-menu-item index="1-2" @click="newWindow">新建</el-menu-item>
         <el-divider></el-divider>
-        <el-menu-item index="1-3">保存</el-menu-item>
-        <el-menu-item index="1-3">另存为</el-menu-item>
+        <el-menu-item index="1-3" @click="save">保存</el-menu-item>
+        <el-menu-item index="1-3" @click="saveAs">另存为</el-menu-item>
         <el-divider></el-divider>
         <el-sub-menu index="1-4">
           <template #title>导出</template>
@@ -28,7 +28,6 @@
 
 <script setup>
 import {appWindow, WebviewWindow} from '@tauri-apps/api/window'
-import Cherry from "cherry-markdown";
 import {getUUID} from "../../util/uuidUtil";
 import storageUtil from "../../util/StorageUtil";
 import StorageUtil from "../../util/StorageUtil";
@@ -87,10 +86,37 @@ const newWindow = async () => {
  * @returns {Promise<void>}
  */
 const save = async () => {
-  if (sessionStorage.getItem("save") === "true") {
+  if (StorageUtil.session.get("save",false)==="true") {
+    let map = storageUtil.get("windowMap", true)
+    let path = map[appWindow.label]
+    if (path===undefined){
+      await saveAs()
+    }else {
+      await invoke("save",{text:CherryObjUtil.interface().getMarkdown(),path:path})
+          .then(res =>{
+            ElMessage.success(res)
+          })
+          .catch(err=>{
+            ElMessage.error(err)
+            console.log(err)
+          })
+    }
 
   }
 }
+
+const saveAs = async ()=>{
+
+  await invoke("save_as",{text:CherryObjUtil.interface().getMarkdown()})
+      .then(res =>{
+        ElMessage.success(res)
+      })
+      .catch(err =>{
+        ElMessage.error(err)
+        console.log(err)
+      })
+}
+
 
 const setStorage = (label, path) => {
   let map = storageUtil.get("windowMap", true)

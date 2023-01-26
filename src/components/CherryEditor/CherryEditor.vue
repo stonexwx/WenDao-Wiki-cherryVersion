@@ -7,7 +7,6 @@
 <script setup>
 import {onMounted, ref} from "vue";
 import {appWindow} from "@tauri-apps/api/window";
-import Cherry from "cherry-markdown";
 import {invoke} from "@tauri-apps/api";
 import CherryObjUtil from "../../util/CherryObjUtil";
 import StorageUtil from "../../util/StorageUtil";
@@ -37,11 +36,17 @@ const getSize=()=> {
   })
 }
 
+//监听按键处理
+document.onkeyup = function (event){
+
+  window.event.preventDefault()
+}
+
 onMounted(async () => {
 
   getSize()
 
-  //打开文件后从缓存中读取前一个窗口从Rust事件获取到的文本信息，这个有改进空间就看Tauri后期有没有优化
+  //打开文件后从缓存中读取前一个窗口从Rust事件获取到的文本地址，这个有改进空间就看Tauri后期有没有优化
   if (StorageUtil.has("filePath",false)) {
     let path = StorageUtil.get("filePath",false)
     console.log(path)
@@ -54,8 +59,6 @@ onMounted(async () => {
   } else {
     CherryObjUtil.interface()
   }
-
-
 })
 </script>
 

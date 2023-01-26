@@ -5,9 +5,6 @@
 
 use std::collections::HashMap;
 use std::error::Error;
-use std::thread::sleep;
-use std::time;
-use lazy_static::lazy_static;
 use rusqlite::Connection;
 use tauri::{Manager, Window};
 use tauri::api::path;
@@ -40,9 +37,22 @@ fn open_file_for_path(path:&str)->Result<HashMap<String,String>,String>{
     menu::get_file_content(path).map_err(|err| err.to_string())
 }
 
+//选择文件
 #[tauri::command]
 fn choose_file()->Result<HashMap<String,String>,String>{
     menu::choose_file().map_err(|err| err.to_string())
+}
+
+//另存为
+#[tauri::command]
+fn save_as(text:&str) ->Result<String,String>{
+    menu::save_as_menu(text).map_err(|err| err.to_string())
+}
+
+//保存
+#[tauri::command]
+fn save(text:&str,path:&str) ->Result<String,String>{
+    menu::save(text,path).map_err(|err| err.to_string())
 }
 
 fn main() {
@@ -53,7 +63,9 @@ fn main() {
             create_toc,
             open,
             open_file_for_path,
-            choose_file
+            choose_file,
+            save_as,
+            save
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

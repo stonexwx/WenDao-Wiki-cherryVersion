@@ -33,8 +33,14 @@ pub fn choose_file() -> Result<HashMap<String,String>,Box<dyn Error>>{
 pub fn get_file_content(path: &str) -> Result<HashMap<String,String>,Box<dyn Error>>{
     file::open_file_for_path(path)
 }
-//
-// pub fn save_menu(text: String) -> Result<String,Box<dyn Error>>{
-//
-// }
+
+//另存为
+pub fn save_as_menu(text: &str) -> Result<String,Box<dyn Error>>{
+    file::save_file(text.to_string())
+}
+
+//保存
+pub fn save(text: &str,path:&str) -> Result<String,Box<dyn Error>>{
+    file::update_file(path.to_string(),text.to_string())
+}
 
