@@ -26,13 +26,14 @@
   </el-card>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import {appWindow, WebviewWindow} from '@tauri-apps/api/window'
 import {getUUID} from "../../util/uuidUtil";
 import storageUtil from "../../util/StorageUtil";
 import StorageUtil from "../../util/StorageUtil";
 import CherryObjUtil from "../../util/CherryObjUtil";
 import {invoke} from "@tauri-apps/api";
+
 
 /**
  * 打开文件
@@ -41,13 +42,13 @@ import {invoke} from "@tauri-apps/api";
 const open = async () => {
 
   if (CherryObjUtil.interface().getValue() === "") {
-    await invoke("open").then(async res => {
+    await invoke("open").then(async (res:any) => {
       CherryObjUtil.interface().setMarkdown(res.text)
       setStorage(appWindow.label, res.path)
       await appWindow.setTitle(res.name)
     })
   } else {
-    await invoke("choose_file").then(async res => {
+    await invoke("choose_file").then(async (res:any) => {
       StorageUtil.set("filePath", res.path)
       let uuid = getUUID()
       const webview = new WebviewWindow(uuid, {
@@ -87,16 +88,16 @@ const newWindow = async () => {
  */
 const save = async () => {
   if (StorageUtil.session.get("save",false)==="true") {
-    let map = storageUtil.get("windowMap", true)
+    let map:any = storageUtil.get("windowMap", true)
     let path = map[appWindow.label]
     if (path===undefined){
       await saveAs()
     }else {
       await invoke("save",{text:CherryObjUtil.interface().getMarkdown(),path:path})
-          .then(res =>{
+          .then((res:any) =>{
             ElMessage.success(res)
           })
-          .catch(err=>{
+          .catch((err:any)=>{
             ElMessage.error(err)
             console.log(err)
           })
@@ -108,18 +109,18 @@ const save = async () => {
 const saveAs = async ()=>{
 
   await invoke("save_as",{text:CherryObjUtil.interface().getMarkdown()})
-      .then(res =>{
+      .then((res:any) =>{
         ElMessage.success(res)
       })
-      .catch(err =>{
+      .catch((err:any) =>{
         ElMessage.error(err)
         console.log(err)
       })
 }
 
 
-const setStorage = (label, path) => {
-  let map = storageUtil.get("windowMap", true)
+const setStorage = (label: string, path: any) => {
+  let map:any = storageUtil.get("windowMap", true)
   if (map === null) {
     map = {}
   }

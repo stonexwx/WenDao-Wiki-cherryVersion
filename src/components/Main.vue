@@ -21,7 +21,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import {onMounted, ref} from "vue";
 import {appWindow} from '@tauri-apps/api/window';
 import 'cherry-markdown/dist/cherry-markdown.min.css'
@@ -29,7 +29,6 @@ import Dialog from "./Dialog/Dialog.vue";
 import CherryEditor from "./CherryEditor/CherryEditor.vue";
 import Aside from "./Aside/Aside.vue";
 import StorageUtil from "../util/StorageUtil";
-import storageUtil from "../util/StorageUtil";
 
 //弹出框
 let flag  = ref(false)
@@ -38,7 +37,6 @@ const closeDialog = () => {
   flag.value=false
 }
 onMounted(() => {
-  storageUtil.session.set("save","false")
   //监测窗口关闭
   appWindow.listen('tauri://close-requested',async ()=>{
     if(sessionStorage.getItem("save")==="true"){

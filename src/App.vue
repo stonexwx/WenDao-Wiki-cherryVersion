@@ -1,8 +1,9 @@
-<script setup>
+<script lang="ts" setup>
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import Main from "./components/Main.vue";
-
+import storageUtil from "./util/StorageUtil";
+storageUtil.session.set("save","false")
 </script>
 
 <template>

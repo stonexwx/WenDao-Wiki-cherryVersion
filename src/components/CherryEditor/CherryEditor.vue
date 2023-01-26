@@ -4,7 +4,7 @@
   </el-card>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import {onMounted, ref} from "vue";
 import {appWindow} from "@tauri-apps/api/window";
 import {invoke} from "@tauri-apps/api";
@@ -37,10 +37,7 @@ const getSize=()=> {
 }
 
 //监听按键处理
-document.onkeyup = function (event){
 
-  window.event.preventDefault()
-}
 
 onMounted(async () => {
 
@@ -51,8 +48,8 @@ onMounted(async () => {
     let path = StorageUtil.get("filePath",false)
     console.log(path)
     await invoke("open_file_for_path", {path: path})
-        .then(res => {
-          console.log(res)
+        .then((res:any) => {
+
           CherryObjUtil.interface().setMarkdown(res.text)
           StorageUtil.remove("filePath")
         })

@@ -13,7 +13,7 @@
   </el-tabs>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 
 import {onMounted, ref} from "vue";
 import {appWindow} from "@tauri-apps/api/window";
@@ -41,7 +41,7 @@ const toc = ref() //侧边目录
 
 onMounted(()=>{
   getSize()
-  listen("toc",(res)=>{
+  listen("toc",(res:any)=>{
     toc.value = res.payload.message
   })
 })
