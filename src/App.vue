@@ -3,6 +3,7 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import Main from "./components/Main.vue";
 import storageUtil from "./util/StorageUtil";
+
 storageUtil.session.set("save","false")
 </script>
 

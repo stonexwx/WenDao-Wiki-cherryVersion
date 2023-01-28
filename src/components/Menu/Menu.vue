@@ -1,28 +1,50 @@
 <template>
   <el-card shadow="never" style="border: 0">
-    <el-menu
-        class="el-menu-demo"
-        mode="horizontal"
-        style="height: 25px"
-    >
-      <el-sub-menu index="1">
-        <template #title>文件</template>
-        <el-menu-item index="1-1" @click="open">打开</el-menu-item>
-        <el-divider></el-divider>
-        <el-menu-item index="1-2" @click="newWindow">新建</el-menu-item>
-        <el-divider></el-divider>
-        <el-menu-item index="1-3" @click="save">保存</el-menu-item>
-        <el-menu-item index="1-3" @click="saveAs">另存为</el-menu-item>
-        <el-divider></el-divider>
-        <el-sub-menu index="1-4">
-          <template #title>导出</template>
-          <el-menu-item index="1-4-1">HTML</el-menu-item>
-          <el-menu-item index="1-4-2">图像</el-menu-item>
-          <el-menu-item index="1-4-3">PDF</el-menu-item>
-        </el-sub-menu>
-      </el-sub-menu>
-
-    </el-menu>
+<!--    <el-menu-->
+<!--        class="el-menu-demo"-->
+<!--        mode="horizontal"-->
+<!--        style="height: 25px"-->
+<!--    >-->
+<!--      <el-sub-menu index="1">-->
+<!--        <template #title>文件</template>-->
+<!--        <el-menu-item index="1-1" @click="open">打开</el-menu-item>-->
+<!--        <el-divider></el-divider>-->
+<!--        <el-menu-item index="1-2" @click="newWindow">新建</el-menu-item>-->
+<!--        <el-divider></el-divider>-->
+<!--        <el-menu-item index="1-3" @click="save">保存</el-menu-item>-->
+<!--        <el-menu-item index="1-3" @click="saveAs">另存为</el-menu-item>-->
+<!--        <el-divider></el-divider>-->
+<!--        <el-sub-menu index="1-4">-->
+<!--          <template #title>导出</template>-->
+<!--          <el-menu-item index="1-4-1">HTML</el-menu-item>-->
+<!--          <el-menu-item index="1-4-2">图像</el-menu-item>-->
+<!--          <el-menu-item index="1-4-3">PDF</el-menu-item>-->
+<!--        </el-sub-menu>-->
+<!--      </el-sub-menu>-->
+<!--    </el-menu>-->
+    <a-dropdown :trigger="['click']">
+      <template #overlay>
+        <a-menu>
+          <a-menu-item @click="open">打开</a-menu-item>
+          <a-menu-divider/>
+          <a-menu-item @click="newWindow">新建</a-menu-item>
+          <a-menu-divider/>
+          <a-menu-item @click="save">保存</a-menu-item>
+          <a-menu-item @click="saveAs">另存为</a-menu-item>
+          <a-menu-divider/>
+          <a-sub-menu key="export" title="导出">
+            <a-menu-item @click="exportHTML">HTML</a-menu-item>
+            <a-menu-divider style="width: 240px"/>
+            <a-menu-item @click="exportImage">图像</a-menu-item>
+            <a-menu-divider/>
+            <a-menu-item @click="CherryObjUtil.interface().export()">PDF</a-menu-item>
+          </a-sub-menu>
+        </a-menu>
+      </template>
+      <a-button type="text" size="small">
+        文件
+      </a-button>
+    </a-dropdown>
   </el-card>
 </template>
 
@@ -106,18 +128,36 @@ const save = async () => {
   }
 }
 
+/**
+ * 另存为
+ */
 const saveAs = async ()=>{
 
   await invoke("save_as",{text:CherryObjUtil.interface().getMarkdown()})
       .then((res:any) =>{
         ElMessage.success(res)
       })
-      .catch((err:any) =>{
-        ElMessage.error(err)
-        console.log(err)
+}
+
+/**
+ * 导出
+ */
+
+//html
+const exportHTML = async ()=>{
+
+  await invoke("save_as",{text:CherryObjUtil.interface().getHtml(true)})
+      .then((res:any) =>{
+        ElMessage.success(res)
       })
 }
 
+//img
+const exportImage = async ()=>{
+
+  CherryObjUtil.interface().export('img')
+
+}
 
 const setStorage = (label: string, path: any) => {
   let map:any = storageUtil.get("windowMap", true)
@@ -140,6 +180,13 @@ const setStorage = (label: string, path: any) => {
 .el-divider--horizontal {
   width: 240px;
   margin: 1px;
+}
+
+.ant-btn-sm{
+  font-size: 12px;
+}
+.ant-dropdown-menu{
+  width: 240px;
 }
 
 </style>

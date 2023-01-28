@@ -7,7 +7,14 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AButton: typeof import('ant-design-vue/es')['Button']
+    ADropdown: typeof import('ant-design-vue/es')['Dropdown']
+    ADropdownButton: typeof import('ant-design-vue/es')['DropdownButton']
+    AMenu: typeof import('ant-design-vue/es')['Menu']
+    AMenuDivider: typeof import('ant-design-vue/es')['MenuDivider']
+    AMenuItem: typeof import('ant-design-vue/es')['MenuItem']
     Aside: typeof import('./src/components/Aside/Aside.vue')['default']
+    ASubMenu: typeof import('ant-design-vue/es')['SubMenu']
     CherryEditor: typeof import('./src/components/CherryEditor/CherryEditor.vue')['default']
     Dialog: typeof import('./src/components/Dialog/Dialog.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
