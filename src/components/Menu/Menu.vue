@@ -1,31 +1,16 @@
 <template>
   <el-card shadow="never" style="border: 0">
-<!--    <el-menu-->
-<!--        class="el-menu-demo"-->
-<!--        mode="horizontal"-->
-<!--        style="height: 25px"-->
-<!--    >-->
-<!--      <el-sub-menu index="1">-->
-<!--        <template #title>文件</template>-->
-<!--        <el-menu-item index="1-1" @click="open">打开</el-menu-item>-->
-<!--        <el-divider></el-divider>-->
-<!--        <el-menu-item index="1-2" @click="newWindow">新建</el-menu-item>-->
-<!--        <el-divider></el-divider>-->
-<!--        <el-menu-item index="1-3" @click="save">保存</el-menu-item>-->
-<!--        <el-menu-item index="1-3" @click="saveAs">另存为</el-menu-item>-->
-<!--        <el-divider></el-divider>-->
-<!--        <el-sub-menu index="1-4">-->
-<!--          <template #title>导出</template>-->
-<!--          <el-menu-item index="1-4-1">HTML</el-menu-item>-->
-<!--          <el-menu-item index="1-4-2">图像</el-menu-item>-->
-<!--          <el-menu-item index="1-4-3">PDF</el-menu-item>-->
-<!--        </el-sub-menu>-->
-<!--      </el-sub-menu>-->
-<!--    </el-menu>-->
     <a-dropdown :trigger="['click']">
       <template #overlay>
         <a-menu>
           <a-menu-item @click="open">打开</a-menu-item>
+          <a-sub-menu key="history" title="打开最近文件">
+            <a-menu-item>重新打开关闭的文件</a-menu-item>
+            <a-menu-divider/>
+            <a-menu-item v-for="(item,index) in historyPath" >{{item}}</a-menu-item>
+            <a-menu-divider/>
+            <a-menu-item>清除最近文件</a-menu-item>
+          </a-sub-menu>
           <a-menu-divider/>
           <a-menu-item @click="newWindow">新建</a-menu-item>
           <a-menu-divider/>
@@ -55,6 +40,10 @@ import storageUtil from "../../util/StorageUtil";
 import StorageUtil from "../../util/StorageUtil";
 import CherryObjUtil from "../../util/CherryObjUtil";
 import {invoke} from "@tauri-apps/api";
+import {ref} from "vue"
+//最近文件
+
+const historyPath = ref<Array<string>>()
 
 
 /**

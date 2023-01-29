@@ -55,6 +55,11 @@ fn save(text:&str,path:&str) ->Result<String,String>{
     menu::save(text,path).map_err(|err| err.to_string())
 }
 
+#[tauri::command]
+fn get_open_history()->Result<String,String>{
+
+}
+
 fn main() {
     let connect = Connection::open("./db/cherry.db").unwrap();
     db::init(&connect);

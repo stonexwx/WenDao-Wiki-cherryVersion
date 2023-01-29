@@ -3,8 +3,9 @@
  */
 
 use lazy_static::lazy_static;
-use rusqlite::{Connection, params, Result};
+use rusqlite::{Connection, Error, params, Result};
 use std::sync::Mutex;
+use crate::db::open_history_table::History;
 
 mod open_history_table;
 mod file_history_table;
@@ -23,9 +24,11 @@ fn check_table_existed(table_name : &str, con : &Connection) -> bool {
 }
 
 pub fn init(connect: &Connection){
-    if !check_table_existed("history",connect){
-        if let Err(e) = open_history_table::create_history_table(connect){
-            println!("{:?}",e);
-        }
+    if !check_table_existed("open_history",connect){
+        open_history_table::create_history_table(connect).unwrap();
     }
+}
+
+pub fn get_open_history(connect: &Connection)->Vec<History>{
+    open_history_table::get_history(connect)?
 }
