@@ -56,13 +56,25 @@ fn save(text:&str,path:&str) ->Result<String,String>{
 }
 
 #[tauri::command]
-fn get_open_history()->Result<String,String>{
+fn set_open_history(path:&str) ->Result<(),String>{
+    let connect = Connection::open("./db/cherry.db")?;
+    db::set_open_history(&connect, path).map_err(|err| err.to_string())?;
+    connect.close()?;
+    Ok(())
+}
+
+#[tauri::command]
+fn get_open_history() -> String {
+    let connect = Connection::open("./db/cherry.db")?;
+    db::get_open_history(&connect)
 
 }
+
 
 fn main() {
     let connect = Connection::open("./db/cherry.db").unwrap();
     db::init(&connect);
+    connect.close().unwrap();
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             create_toc,

@@ -2,13 +2,14 @@
 操作sqllite的一些方法
  */
 
-use lazy_static::lazy_static;
-use rusqlite::{Connection, Error, params, Result};
+use std::error::Error;
+use rusqlite::{Connection, params, Result};
 use std::sync::Mutex;
 use crate::db::open_history_table::History;
 
 mod open_history_table;
 mod file_history_table;
+mod dbutil;
 
 //检测表是否存在
 fn check_table_existed(table_name : &str, con : &Connection) -> bool {
@@ -29,6 +30,11 @@ pub fn init(connect: &Connection){
     }
 }
 
-pub fn get_open_history(connect: &Connection)->Vec<History>{
-    open_history_table::get_history(connect)?
+pub fn get_open_history(connect: &Connection)->String{
+    open_history_table::get_history(connect).unwrap()
+}
+
+pub fn set_open_history(connect: &Connection, path:&str)->Result<(),Box<dyn Error>>{
+    open_history_table::set_history(path,connect)?;
+    Ok(())
 }

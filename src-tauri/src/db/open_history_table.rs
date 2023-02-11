@@ -4,8 +4,10 @@
 use std::error::Error;
 use chrono::prelude::*;
 use rusqlite::{Connection, params};
+use serde_json::json;
 
-pub struct History {
+#[derive(Serialize, Deserialize)]
+struct History {
     h_id: usize,
     path: String,
     date: String
@@ -14,11 +16,12 @@ pub struct History {
 impl History{
     pub fn new(path:String) -> History{
         History{
-            h_id,
+            h_id:0,
             path,
-            date:Local::now().to_string
+            date:Local::now().to_string()
         }
     }
+
 }
 
 //创建open_history表
@@ -44,7 +47,7 @@ pub fn set_history(path: &str,connect: &Connection) -> Result<(),Box<dyn Error>>
     }
     if res.len()>=10 {
         connect.execute("UPDATE open_history set path= ?1 , date =?2 where rowid = ?3 ",
-                        params![path,Local::now(),res[0].h_id])?;
+                        params![path,Local::now().to_string(),res[0].h_id])?;
     }else {
         connect.execute("INSERT INTO open_history(path,date) values(?1,?2)",
                         params![path,Local::now().to_string()])?;
@@ -54,9 +57,9 @@ pub fn set_history(path: &str,connect: &Connection) -> Result<(),Box<dyn Error>>
 }
 
 //获取打开历史记录
-pub fn get_history(connect: &Connection) -> Result<Vec<History>,Box<dyn Error>> {
+pub fn get_history(connect: &Connection) -> Result<String,Box<dyn Error>> {
 
-    let mut stmt = connect.prepareo("select h_id,path,date from open_history")?;
+    let mut stmt = connect.prepare("select h_id,path,date from open_history")?;
     let history_iter = stmt.query_map([],|row|{
         Ok(History{
             h_id: row.get(0)?,
@@ -68,7 +71,7 @@ pub fn get_history(connect: &Connection) -> Result<Vec<History>,Box<dyn Error>> 
     for history in history_iter{
         res.push(history?);
     }
-    Ok(res)
+    Ok(serde_json::to_string(&res)?)
 }
 
 
