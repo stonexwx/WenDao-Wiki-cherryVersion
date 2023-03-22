@@ -26,6 +26,7 @@ declare module '@vue/runtime-core' {
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
+    File: typeof import('./src/components/Menu/childe/File.vue')['default']
     Main: typeof import('./src/components/Main.vue')['default']
     Menu: typeof import('./src/components/Menu/Menu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

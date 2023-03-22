@@ -4,10 +4,8 @@
 )]
 
 use std::collections::HashMap;
-use std::error::Error;
 use rusqlite::Connection;
 use tauri::{Manager, Window};
-use tauri::api::path;
 use crate::create_toc::Poc;
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
