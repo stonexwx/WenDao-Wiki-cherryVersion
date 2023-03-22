@@ -5,9 +5,9 @@ use std::error::Error;
 use chrono::prelude::*;
 use rusqlite::{Connection, params};
 use serde_json::json;
-
+use serde::{Serialize,Deserialize};
 #[derive(Serialize, Deserialize)]
-struct History {
+pub struct History {
     h_id: usize,
     path: String,
     date: String
