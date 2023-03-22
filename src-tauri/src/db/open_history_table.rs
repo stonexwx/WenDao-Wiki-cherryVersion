@@ -58,14 +58,14 @@ pub fn set_history(path: &str,connect: &Connection) -> Result<(),Box<dyn Error>>
         }
         res.push(path2);
     }
-    if res.len() <10{
+    return if res.len() < 10 {
         connect.execute("INSERT INTO open_history(path,date) values(?1,?2)",
                         params![path,Local::now().to_string()])?;
-        return Ok(());
-    }else {
+        Ok(())
+    } else {
         connect.execute("UPDATE open_history set path= ?1 , date =?2 where rowid = ?3 ",
                         params![path,Local::now().to_string(),res[0].h_id])?;
-        return Ok(());
+        Ok(())
     }
 }
 
