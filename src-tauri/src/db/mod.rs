@@ -38,3 +38,8 @@ pub fn set_open_history(connect: &Connection, path:&str)->Result<(),Box<dyn Erro
     open_history_table::set_history(path,connect)?;
     Ok(())
 }
+
+pub fn delete_history_all(connect: &Connection)->Result<(),Box<dyn Error>>{
+    open_history_table::clear_history(connect)?;
+    Ok(())
+}

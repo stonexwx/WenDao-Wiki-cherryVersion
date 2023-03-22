@@ -8,7 +8,7 @@
           <a-menu-divider/>
           <a-menu-item v-for="(val,key,index) in history " :key="key" >{{val.path}}</a-menu-item>
           <a-menu-divider/>
-          <a-menu-item>清除最近文件</a-menu-item>
+          <a-menu-item @click="clear">清除所有记录</a-menu-item>
         </a-sub-menu>
         <a-menu-divider/>
         <a-menu-item @click="newWindow">新建</a-menu-item>
@@ -143,13 +143,32 @@ const exportImage = async ()=>{
 
 }
 
-const history = ref()
 
+/**
+ * 获取历史记录
+ */
+const history = ref()
 const openHistory = async ()=>{
   let historyJson:string = await invoke("get_open_history")
   history.value = JSON.parse(historyJson)
   console.log(history)
 }
+
+/**
+ * 清楚历史记录
+ */
+const clear = async ()=>{
+  await invoke("del_open_history")
+     .catch((err:any) =>{
+        ElMessage.error(err)
+      })
+}
+
+/**
+ * 缓存窗口map
+ * @param label
+ * @param path
+ */
 const setStorage = (label: string, path: any) => {
   let map:any = storageUtil.get("windowMap", true)
   if (map === null) {

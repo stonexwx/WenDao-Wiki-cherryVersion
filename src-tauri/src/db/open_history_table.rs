@@ -87,5 +87,12 @@ pub fn get_history(connect: &Connection) -> Result<String,Box<dyn Error>> {
     Ok(serde_json::to_string(&res)?)
 }
 
+//清楚所有历史记录
+pub fn clear_history(connect: &Connection) -> Result<(),Box<dyn Error>>{
+    connect.execute("DELETE from open_history", ())?;
+    Ok(())
+}
+
+
 
 

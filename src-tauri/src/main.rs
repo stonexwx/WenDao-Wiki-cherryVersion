@@ -69,6 +69,15 @@ fn get_open_history() -> String {
     db::get_open_history(&connect)
 }
 
+//删除全部历史记录
+#[tauri::command]
+fn del_open_history() -> Result<(),String>{
+    let connect = Connection::open("./db/cherry.db").unwrap();
+    db::delete_history_all(&connect).map_err(|err| err.to_string())?;
+    connect.close().unwrap();
+    Ok(())
+}
+
 
 fn main() {
     let connect = Connection::open("./db/cherry.db").unwrap();
@@ -84,7 +93,8 @@ fn main() {
             save_as,
             save,
             get_open_history,
-            set_open_history
+            set_open_history,
+            del_open_history
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
