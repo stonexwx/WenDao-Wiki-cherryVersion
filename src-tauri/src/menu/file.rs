@@ -9,6 +9,8 @@ use std::io::{Read, Write};
 use std::path;
 use std::path::{PathBuf};
 use rfd::FileDialog;
+use rusqlite::Connection;
+use crate::db;
 
 
 //用于打开文件时拉起系统文件管理
@@ -64,6 +66,9 @@ pub(crate) fn get_file_name(path: &PathBuf) -> String{
 //打开文件
 pub fn open_file() -> Result<HashMap<String,String>,Box<dyn Error>> {
     let path = get_open_file_path();
+    let connect = Connection::open("./db/cherry.db").unwrap();
+    db::set_open_history(&connect, path.as_path().to_str().unwrap()).expect("地址转换错误");
+    connect.close().unwrap();
     get_file_content(&path)
 }
 //根据路径打开文件
@@ -75,8 +80,11 @@ pub fn open_file_for_path(path:&str) -> Result<HashMap<String,String>,Box<dyn Er
 //保存指定文件
 pub fn save_file(text: String) ->Result<String,Box<dyn Error>>{
     let path = get_save_file_path();
-    let mut file = File::create(path)?;
+    let mut file = File::create(&path)?;
     file.write_all(text.as_ref())?;
+    let connect = Connection::open("./db/cherry.db").unwrap();
+    db::set_open_history(&connect, path.as_path().to_str().unwrap()).expect("地址转换错误");
+    connect.close().unwrap();
     Ok(String::from("保存成功！！"))
 }
 

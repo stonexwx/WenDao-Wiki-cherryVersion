@@ -31,7 +31,7 @@ pub fn init(connect: &Connection){
 }
 
 pub fn get_open_history(connect: &Connection)->String{
-    open_history_table::get_history(connect).unwrap()
+    open_history_table::get_history(&connect).unwrap()
 }
 
 pub fn set_open_history(connect: &Connection, path:&str)->Result<(),Box<dyn Error>>{

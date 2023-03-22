@@ -3,10 +3,10 @@
     <template #overlay>
       <a-menu>
         <a-menu-item @click="open">打开</a-menu-item>
-        <a-sub-menu key="history" title="打开最近文件">
+        <a-sub-menu key="history" title="打开最近文件" @mouseover.once="openHistory">
           <a-menu-item>重新打开关闭的文件</a-menu-item>
           <a-menu-divider/>
-          <a-menu-item v-for="(item,index) in historyPath" >{{item}}</a-menu-item>
+          <a-menu-item v-for="(val,key,index) in history " :key="key" >{{val.path}}</a-menu-item>
           <a-menu-divider/>
           <a-menu-item>清除最近文件</a-menu-item>
         </a-sub-menu>
@@ -39,9 +39,7 @@ import StorageUtil from "../../../util/StorageUtil";
 import {getUUID} from "../../../util/uuidUtil";
 import storageUtil from "../../../util/StorageUtil";
 import {ref} from "vue";
-
-//最近文件
-const historyPath = ref<Array<string>>([])
+import {json} from "stream/consumers";
 
 /**
  * 打开文件
@@ -145,6 +143,13 @@ const exportImage = async ()=>{
 
 }
 
+const history = ref()
+
+const openHistory = async ()=>{
+  let historyJson:string = await invoke("get_open_history")
+  history.value = JSON.parse(historyJson)
+  console.log(history)
+}
 const setStorage = (label: string, path: any) => {
   let map:any = storageUtil.get("windowMap", true)
   if (map === null) {

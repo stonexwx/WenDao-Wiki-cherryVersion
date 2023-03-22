@@ -53,6 +53,7 @@ fn save(text:&str,path:&str) ->Result<String,String>{
     menu::save(text,path).map_err(|err| err.to_string())
 }
 
+//插入历史记录
 #[tauri::command]
 fn set_open_history(path:&str) ->Result<(),String>{
     let connect = Connection::open("./db/cherry.db").unwrap();
@@ -61,17 +62,18 @@ fn set_open_history(path:&str) ->Result<(),String>{
     Ok(())
 }
 
+//获取历史记录
 #[tauri::command]
 fn get_open_history() -> String {
     let connect = Connection::open("./db/cherry.db").unwrap();
     db::get_open_history(&connect)
-
 }
 
 
 fn main() {
     let connect = Connection::open("./db/cherry.db").unwrap();
     db::init(&connect);
+    db::get_open_history(&connect);
     connect.close().unwrap();
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
@@ -80,7 +82,9 @@ fn main() {
             open_file_for_path,
             choose_file,
             save_as,
-            save
+            save,
+            get_open_history,
+            set_open_history
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

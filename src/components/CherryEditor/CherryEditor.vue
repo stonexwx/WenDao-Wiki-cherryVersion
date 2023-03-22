@@ -46,6 +46,7 @@ onMounted(async () => {
   //打开文件后从缓存中读取前一个窗口从Rust事件获取到的文本地址，这个有改进空间就看Tauri后期有没有优化
   if (StorageUtil.has("filePath",false)) {
     let path = StorageUtil.get("filePath",false)
+    await invoke("set_open_history",{path:path})
     console.log(path)
     await invoke("open_file_for_path", {path: path})
         .then((res:any) => {
